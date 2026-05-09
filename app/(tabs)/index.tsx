@@ -1,98 +1,150 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import ProductCard, { Product } from '../../components/ProductCard';
+const products:Product[] = [
+  {
+    "id": "1",
+    "name": "Wireless Headphones",
+    "price": 99.99,
+    "oldPrice": 129.99,
+    "rating": 4.5,
+    "reviews": 128,
+    "category": "Electronics",
+    "stock": "In Stock",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop",
+    "description": "Noise-cancelling over-ear headphones."
+  },
+  {
+    "id": "2",
+    "name": "Smart Watch",
+    "price": 149.50,
+    "oldPrice": 199.00,
+    "rating": 4.2,
+    "reviews": 85,
+    "category": "Wearables",
+    "stock": "Low Stock",
+    "image": "https://plus.unsplash.com/premium_photo-1664392147011-2a720f214e01?q=80&w=878&auto=format&fit=crop",
+    "description": "Fitness tracking and notifications."
+  },
+  {
+    "id": "3",
+    "name": "Leather Wallet",
+    "price": 45.00,
+    "oldPrice": 60.00,
+    "rating": 4.8,
+    "reviews": 210,
+    "category": "Accessories",
+    "stock": "In Stock",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1099&auto=format&fit=crop",
+    "description": "Genuine brown leather bi-fold."
+  },
+  {
+    "id": "4",
+    "name": "Mechanical Keyboard",
+    "price": 120.00,
+    "oldPrice": 150.00,
+    "rating": 4.7,
+    "reviews": 45,
+    "category": "Electronics",
+    "stock": "In Stock",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1170&auto=format&fit=crop",
+    "description": "RGB backlit with tactile switches."
+  },
+  {
+    "id": "5",
+    "name": "Coffee Tumbler",
+    "price": 25.99,
+    "oldPrice": 35.00,
+    "rating": 4.0,
+    "reviews": 320,
+    "category": "Kitchen",
+    "stock": "Out of Stock",
+    "image": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=1170&auto=format&fit=crop",
+    "description": "Insulated stainless steel mug."
+  }
+];
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+
 
 export default function HomeScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+    // Simple mock to toggle loading state for testing
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 3000);
+  }, []);
+  
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ProductCard item={item} isLoading={isLoading} />
+        )}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    backgroundColor: '#f5f5f5',
+  },
+  category: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#eee',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 5,
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 5,
+  },
+  infoContainer: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  rating: {
+    fontSize: 14,
+    color: '#888',
+    marginVertical: 4,
+  },
+  priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  oldPrice: {
+    textDecorationLine: 'line-through',
+    color: '#999',
+    fontSize: 14,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  stock: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 5,
   },
+
+  card: {
+    backgroundColor: '#fff',
+    padding: 15,
+    margin: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 3, // Shadow for Android
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  price: {
+    color: 'green',
+  }
 });
